@@ -1,0 +1,171 @@
+{
+  "info": {
+    "name": "AccessFlow AI API Collection",
+    "description": "API requests for AccessFlow AI - Accessibility Workflow Copilot",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Priya Rao\",\n  \"email\": \"priya@example.com\",\n  \"password\": \"Password123!\",\n  \"preferredLanguage\": \"te\",\n  \"explanationLevel\": \"simple\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/auth/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"demo@accessflow.ai\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Get Me",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:3001/api/auth/me",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "auth", "me"]
+        }
+      }
+    },
+    {
+      "name": "Profile - Get Profile",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:3001/api/profile",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "profile"]
+        }
+      }
+    },
+    {
+      "name": "Profile - Update Profile",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"preferred_language\": \"te\",\n  \"explanation_level\": \"simple\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/profile",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "profile"]
+        }
+      }
+    },
+    {
+      "name": "Workflow - Get Workflows",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:3001/api/workflows",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "workflows"]
+        }
+      }
+    },
+    {
+      "name": "Workflow - Get Workflow by ID",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:3001/api/workflows/d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "workflows", "d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44"]
+        }
+      }
+    },
+    {
+      "name": "Workflow - Get Checklist",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:3001/api/workflows/d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44/checklist",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "workflows", "d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44", "checklist"]
+        }
+      }
+    },
+    {
+      "name": "AI - Ask Contextual Question",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"workflowId\": \"d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44\",\n  \"stepId\": \"e4eebc99-9c0b-4ef8-bb6d-6bb9bd380003\",\n  \"question\": \"What does attested mean and how do I get it?\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/ai/ask",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "ai", "ask"]
+        }
+      }
+    }
+  ]
+}
