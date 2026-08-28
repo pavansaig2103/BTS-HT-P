@@ -1,9 +1,11 @@
 ﻿import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+// Use provided VITE_API_BASE_URL or fallback to production API; ensure it ends with /api
+const envUrl = import.meta.env.VITE_API_BASE_URL || 'https://accessflow-ai-api.onrender.com/api';
+const cleanUrl = envUrl.endsWith('/api') ? envUrl : `${envUrl.replace(/\/$/, '')}/api`;
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: cleanUrl,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -14,6 +16,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessflow_token');
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

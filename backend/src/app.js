@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const cors = require('cors');
 const env = require('./config/env');
 const { apiLimiter } = require('./middleware/rateLimit.middleware');
@@ -100,3 +100,4 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;
+
