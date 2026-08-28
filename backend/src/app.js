@@ -25,18 +25,42 @@ const allowedOrigins = [
   'http://127.0.0.1:5173',
 ];
 
+// Custom CORS middleware: set CORS headers explicitly so preflight replies are always correct
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Allow requests with no origin (curl, Postman) or from configured/known origins
+  const ok =
+    !origin ||
+    origin === env.FRONTEND_URL ||
+    allowedOrigins.includes(origin) ||
+    env.NODE_ENV === 'development' ||
+    (typeof origin === 'string' && origin.endsWith('.vercel.app'));
+
+  if (ok && origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  if (req.method === 'OPTIONS') {
+    // Respond to preflight immediately
+    return res.sendStatus(204);
+  }
+  next();
+});
+
+// Also keep the cors middleware as a fallback for downstream middleware that may rely on it
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or Postman)
-      // Allow configured FRONTEND_URL, localhost dev origins, and Vercel preview/production domains ending with .vercel.app
-      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV === 'development' || (typeof origin === 'string' && origin.endsWith('.vercel.app')) || (env.FRONTEND_URL && origin === env.FRONTEND_URL)) {
+      if (!origin || origin === env.FRONTEND_URL || allowedOrigins.includes(origin) || env.NODE_ENV === 'development' || (typeof origin === 'string' && origin.endsWith('.vercel.app'))) {
         callback(null, true);
       } else {
-        callback(new Error('Blocked by CORS policy'));
+        callback(null, false);
       }
     },
-
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
