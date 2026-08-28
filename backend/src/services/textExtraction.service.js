@@ -35,7 +35,7 @@ class TextExtractionService {
         return {
           text: extractedText,
           extractionMethod: 'pdf-parse',
-          confidence: 'confirmed',
+          confidence: 0.95,
           warnings,
         };
       }
