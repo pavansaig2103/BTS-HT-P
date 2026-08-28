@@ -6,20 +6,15 @@ const { seedInMemoryStore } = require('./config/seedData');
 const PORT = env.PORT || 3001;
 
 async function startServer() {
-  // Seed memory store with demo workflow for guaranteed offline / test experience
-  await seedInMemoryStore(inMemoryStore);
-
-  const server = app.listen(PORT, () => {
-    console.log(`
-  ======================================================
-  🚀 AccessFlow AI Backend Server Active
-  🌐 Port: ${PORT}
-  🌍 Environment: ${env.NODE_ENV}
-  🩺 Health check: http://localhost:${PORT}/health
-  👥 Frontend URL: ${env.FRONTEND_URL}
-  ======================================================
-    `);
+  // Start HTTP server immediately
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running and listening on port ${PORT}`);
   });
+
+  // Seed memory store asynchronously; do not block server startup
+  seedInMemoryStore(inMemoryStore)
+    .then(() => console.log('🌱 In-memory demo data seeded successfully.'))
+    .catch((err) => console.warn('⚠️ Seeding in-memory store failed:', err && err.message));
 
   const handleShutdown = (signal) => {
     console.log(`\n🛑 Received ${signal}. Shutting down gracefully...`);
