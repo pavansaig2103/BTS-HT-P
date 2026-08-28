@@ -29,12 +29,14 @@ app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, or Postman)
-      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV === 'development') {
+      // Allow configured FRONTEND_URL, localhost dev origins, and Vercel preview/production domains ending with .vercel.app
+      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV === 'development' || (typeof origin === 'string' && origin.endsWith('.vercel.app')) || (env.FRONTEND_URL && origin === env.FRONTEND_URL)) {
         callback(null, true);
       } else {
         callback(new Error('Blocked by CORS policy'));
       }
     },
+
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
